@@ -3,7 +3,7 @@ import { SERVER_URL } from '../config';
 
 export function getPhotos(is_label = 0, page_num = 1, page_size = 15) {
   return axios({
-    url: `${SERVER_URL}photo`,
+    url: `${SERVER_URL}photo/list`,
     method: 'get',
     params: {
       page_num,
@@ -14,6 +14,58 @@ export function getPhotos(is_label = 0, page_num = 1, page_size = 15) {
   });
 }
 
+export function featureAndAnswer() {
+  return axios({
+    url: `${SERVER_URL}feature/list`,
+    method: 'get',
+    withCredentials: true
+  });
+}
+
+export function addFeature(pid,name,key) {
+  return axios({
+    url: `${SERVER_URL}feature/add_feature`,
+    method: 'post',
+    data: {
+      pid,
+      name,
+      key
+    },
+    withCredentials: true
+  });
+}
+
+export function addFeatureAnswer(feature_item_id, name) {
+  return axios({
+    url: `${SERVER_URL}feature/feature_answer`,
+    method: 'post',
+    data: {
+      feature_item_id,
+      name
+    },
+    withCredentials: true
+  });
+}
+
+export function delFeatureAnswer(id) {
+  return axios({
+    url: `${SERVER_URL}feature/feature_answer`,
+    method: 'delete',
+    data: {
+      id
+    },
+    withCredentials: true
+  });
+}
+
+export function snedLabel(info) {
+  return axios({
+    url: `${SERVER_URL}feature/addphotofeature`,
+    method: 'post',
+    data:info,
+    withCredentials: true
+  });
+}
 export function analyzefacepro(url){
   return axios({
     url: 'http://diff.sharezdm.cn/index/analyzefacepro',
@@ -21,6 +73,22 @@ export function analyzefacepro(url){
     data: {
       image_url: url
     },
-    withCredentials: true
+    // withCredentials: true
+  });
+}
+
+export function getCommonImgToken() {
+  return axios({
+    url: 'http://diff.sharezdm.cn/index/getuploadtoken',
+    method: 'get',
+    // withCredentials: true
+  });
+}
+
+export function uploadToQiniu(formData) {
+  return axios({
+    url: 'http://upload.qiniup.com',
+    method: 'post',
+    data: formData
   });
 }

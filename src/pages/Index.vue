@@ -83,14 +83,21 @@ export default {
   methods: {
     async init() {
       let labelData = await getPhotos();
-      this.labelData = labelData.data.data.list
+      this.labelData = labelData.data.data.rows
 
       let notLabelData = await getPhotos(1);
-      this.notLabelData = notLabelData.data.data.list;
+      this.notLabelData = notLabelData.data.data.rows;
     },
-    handleClick (tab, event) {
-      console.log(tab, event)
-      this.$router.push('/label')
+    handleClick (e) {
+      console.log(e);
+      this.$router.push({
+        path: '/label',
+        query: {
+          id: e.id,
+          user_id: e.user_id,
+          file_url: e.file_url
+        }
+      })
     }
   }
 }
