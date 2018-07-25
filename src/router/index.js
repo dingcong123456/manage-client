@@ -4,6 +4,7 @@ import Index from '@/pages/Index'
 import Label from '@/pages/Label'
 import Feature from '@/pages/Feature'
 import TestAiLabelFace from '@/pages/TestAiLabelFace'
+import NosePoint from '@/pages/NosePoint'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
       path: '/test',
       name: 'TestAiLabelFace',
       component: TestAiLabelFace
+    },
+    {
+      path: '/nose_point',
+      name: 'NosePoint',
+      component: NosePoint
     }
   ]
 })
