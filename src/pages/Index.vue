@@ -10,7 +10,7 @@
               label="照片"
               width="180">
               <template slot-scope="scope">
-                <div :style="{backgroundImage: 'url(' + scope.row.file_url + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+                <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.file_url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
               </template>
             </el-table-column>
             <el-table-column
@@ -27,7 +27,7 @@
               label="操作"
               width="180">
                <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">标注</el-button>
+                <el-button @click="labelClick(scope.row)" type="text" size="small">标注</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -41,7 +41,7 @@
               label="照片"
               width="180">
               <template slot-scope="scope">
-                <div :style="{backgroundImage: 'url(' + scope.row.file_url + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+                <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.file_url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
               </template>
             </el-table-column>
             <el-table-column
@@ -58,7 +58,7 @@
               label="操作"
               width="180">
                <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">更改标注</el-button>
+                <el-button @click="updateLabelClick(scope.row)" type="text" size="small">更改标注</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -68,13 +68,15 @@
 
 <script>
 import { getPhotos } from '../api';
+import { qiniuUrl } from '../util';
 export default {
 	name: 'Index',
 	data() {
 		return {
       activeName: 'first',
       labelData: [],
-      notLabelData: []
+      notLabelData: [],
+      qiniuUrl
 		}
   },
   mounted() {
@@ -88,10 +90,21 @@ export default {
       let notLabelData = await getPhotos(1);
       this.notLabelData = notLabelData.data.data.rows;
     },
-    handleClick (e) {
+    labelClick (e) {
       console.log(e);
       this.$router.push({
         path: '/label',
+        query: {
+          id: e.id,
+          user_id: e.user_id,
+          file_url: e.file_url
+        }
+      })
+    },
+    updateLabelClick (e) {
+      console.log(e);
+      this.$router.push({
+        path: '/update_label',
         query: {
           id: e.id,
           user_id: e.user_id,

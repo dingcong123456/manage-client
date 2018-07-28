@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SERVER_URL } from '../config';
 
-export function getPhotos(is_label = 0, page_num = 1, page_size = 15) {
+export function getPhotos(is_label = 0, page_num = 1, page_size = 100) {
   return axios({
     url: `${SERVER_URL}photo/list`,
     method: 'get',
@@ -66,6 +66,18 @@ export function snedLabel(info) {
     withCredentials: true
   });
 }
+
+export function getPhotoFeature(photo_id) {
+  return axios({
+    url: `${SERVER_URL}feature/photo_feature`,
+    method: 'get',
+    params: {
+      photo_id
+    },
+    withCredentials: true
+  });
+}
+
 export function analyzefacepro(url){
   return axios({
     url: 'http://diff.sharezdm.cn/index/analyzefacepro',
@@ -81,7 +93,7 @@ export function getCommonImgToken() {
   return axios({
     url: 'http://diff.sharezdm.cn/index/getuploadtoken',
     method: 'get',
-    // withCredentials: true
+    withCredentials: true
   });
 }
 

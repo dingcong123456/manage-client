@@ -87,7 +87,7 @@ export default {
 				form.append('file', file);
 				let res = await uploadToQiniu(form);
 				let hash = res.data.hash;
-				let url = `http://os6zbdtt2.bkt.clouddn.com/${hash}`;
+				let url = `http://pc43w2wc6.bkt.clouddn.com/${hash}`;
 				this.url = url;
 
 				let end = new Date();
