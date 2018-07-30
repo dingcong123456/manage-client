@@ -74,15 +74,15 @@ export default {
           type: 'warning'
         });
       };
-      // this.$router.push({
-      //   path: '/label',
-      //   query: {
-      //     id: photoInfo.id,
-      //     user_id: photoInfo.user_id,
-      //     file_url: photoInfo.file_url
-      //   }
-      // });
-      // window.location.reload()
+      this.$router.push({
+        path: '/label',
+        query: {
+          id: photoInfo.id,
+          user_id: photoInfo.user_id,
+          file_url: photoInfo.file_url
+        }
+      });
+      window.location.reload()
     },
 		async init() {
 			let info = await featureAndAnswer();

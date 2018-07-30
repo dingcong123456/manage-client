@@ -170,8 +170,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .wrapper {
-	width: 100%;
-	height: 100%;
+  overflow: hidden;
 	background: white;
 }
 </style>

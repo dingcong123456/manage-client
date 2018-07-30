@@ -36,8 +36,8 @@ export default {
 	data() {
 		return {
 			answerData: [],
-      qiniuUrl,
-      showPointBox: false
+			qiniuUrl,
+			showPointBox: false,
 		};
 	},
 	methods: {
@@ -89,45 +89,58 @@ export default {
 		},
 		async init() {
 			let answers = await getPhotoFeature(this.$route.query.id);
-			let answersObj = {};
-			Object.keys(answers.data.data.base_feature).forEach(key => {
-				answersObj = Object.assign({}, answersObj, answers.data.data.base_feature[key]);
-			});
+      let answerData = [];
+      let info = await featureAndAnswer();
+			if (answers.data.data) {
+				let answersObj = {};
+				Object.keys(answers.data.data.base_feature).forEach(key => {
+					answersObj = Object.assign({}, answersObj, answers.data.data.base_feature[key]);
+				});
 
-			let info = await featureAndAnswer();
-			let answerData = [];
-			for (let i in info.data.data) {
-				for (let j in info.data.data[i].list) {
-					Object.keys(answersObj).forEach(key => {
-						if (info.data.data[i].list[j].item.id === parseInt(key)) {
-              info.data.data[i].list[j].answer = answersObj[key];
-              return;
-						}
-					});
+			
+
+				for (let i in info.data.data) {
+					for (let j in info.data.data[i].list) {
+						Object.keys(answersObj).forEach(key => {
+							if (info.data.data[i].list[j].item.id === parseInt(key)) {
+								info.data.data[i].list[j].answer = answersObj[key];
+								return;
+							}
+						});
+					}
+					answerData.push(info.data.data[i]);
 				}
-				answerData.push(info.data.data[i]);
+				this.answerData = answerData;
+			} else {
+				for (let i in info.data.data) {
+					for (let j in info.data.data[i].list) {
+						info.data.data[i].list[j].answer = '';
+					}
+					answerData.push(info.data.data[i]);
+				}
+				console.log(answerData);
+				this.answerData = answerData;
 			}
-			this.answerData = answerData;
 		},
 	},
 	mounted() {
 		this.init();
-  },
-  components: {
-    NosePoit
-  }
+	},
+	components: {
+		NosePoit,
+	},
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.point-box{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 101;
+.point-box {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 101;
 }
 .container {
 	flex-direction: row;
