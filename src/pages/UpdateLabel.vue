@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="photo-box" >
-      <div class="img" :style="{backgroundImage: `url(${qiniuUrl($route.query.file_url)})`}"></div>
+      <div @click="showPointBox=true" class="img" :style="{backgroundImage: `url(${qiniuUrl($route.query.file_url)})`}"></div>
     </div>
     <div class="label-box">
       <div v-for="featureGroup in answerData">
@@ -20,19 +20,24 @@
           <el-button type="primary" @click="next">更新</el-button> 
           <!-- <el-button type="danger">跳过</el-button> -->
       </div>
-    </div>  
+    </div>
+    <div class="point-box" v-if="showPointBox">
+      <nose-poit @close="showPointBox=false" :fileUrl="qiniuUrl($route.query.file_url)" :photoId="parseInt($route.query.id)"></nose-poit>
+    </div>   
   </div>  
 </template>
 
 <script>
 import { featureAndAnswer, snedLabel, getPhotos, getPhotoFeature } from '../api';
 import { qiniuUrl } from '../util';
+import NosePoit from './NosePoint';
 export default {
 	name: 'Label',
 	data() {
 		return {
 			answerData: [],
-			qiniuUrl,
+      qiniuUrl,
+      showPointBox: false
 		};
 	},
 	methods: {
@@ -107,12 +112,23 @@ export default {
 	},
 	mounted() {
 		this.init();
-	},
+  },
+  components: {
+    NosePoit
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.point-box{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 101;
+}
 .container {
 	flex-direction: row;
 	width: 100%;

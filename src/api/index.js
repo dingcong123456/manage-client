@@ -78,6 +78,29 @@ export function getPhotoFeature(photo_id) {
   });
 }
 
+export function getPointInfo(photo_id) {
+  return axios({
+    url: `${SERVER_URL}photo/point_info`,
+    method: 'get',
+    params: {
+      photo_id
+    },
+    withCredentials: true
+  });
+}
+
+export function addPointInfo(point_info, photo_id) {
+  return axios({
+    url: `${SERVER_URL}photo/point_info`,
+    method: 'post',
+    data: {
+      point_info,
+      photo_id
+    },
+    withCredentials: true
+  });
+}
+
 export function analyzefacepro(url){
   return axios({
     url: 'http://diff.sharezdm.cn/index/analyzefacepro',

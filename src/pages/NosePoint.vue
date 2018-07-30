@@ -1,41 +1,79 @@
 <template>
-  <div class="container" ref="container">
+  <div class="wrapper" ref="container">
+    <div class="btnBox">
+      <el-button type="primary" @click="addPonit">更新</el-button> 
+      <el-button type="primary" @click="close">关闭</el-button> 
+    </div>
 
   </div>
 </template>
 
 <script>
-import { analyzefacepro, getCommonImgToken, uploadToQiniu } from '../api';
+import { getPointInfo, addPointInfo } from '../api';
 export default {
 	data() {
 		return {
-			circles: [[143,198],[154,168]]
+			circles: [[143, 198], [154, 168]],
 		};
+	},
+	props: {
+		photoId: {
+			type: Number,
+		},
+		fileUrl: {
+			type: String,
+			default:
+				'http://os6zbdtt2.bkt.clouddn.com/Fmn93Hl1NzY2A9dP-FgBmrNzRxMa?nsukey=SoEyfKwopX0ZH%2FuoHP1Ua0s6xaa4DL6iW19AcUv6O%2Boenz4C25HDtZSIlkpHXh8NSvsi1fjAEGrCYrW%2BIpwRz%2FlYmzj53JVNt8iIgXERi2XX6VG5hWn8Mx75U%2F2qHQcvN9TJGT7y%2BXsjhLvjHAMP6vReveDWDdxKD9e46hk6rsuZUMU%2BznUPpAa8txpzGarQNoG2a%2FfZCvU4yg0LhZQBAg%3D%3D',
+		},
 	},
 	mounted() {
 		this.init();
 	},
 	methods: {
-		formDataCircles() {
-			this.circles = this.circles.map((value) => {
-				return { x: value[0], y: value[1], isSelected: false }
+		async addPonit() {
+      let circles =  this.circles.map(value => {
+				return [value.x, value.y];
 			});
-			this.circles.push({ x: 180, y: 300, isSelected: false });
-			this.circles.push({ x: 280, y: 300, isSelected: false });
+			await addPointInfo(JSON.stringify(circles), this.photoId);
+			this.$message({
+				message: '更新成功',
+				type: 'success',
+			});
 		},
-		init() {
+		formDataCircles() {
+			this.circles = this.circles.map(value => {
+				return { x: value[0], y: value[1], isSelected: false };
+			});
+      if (this.circles.length === 82) return;
+      let point28 = this.circles[28];
+      let point29 = this.circles[29];
+      let point80 = { x: point29.x - (point29.y - point28.y), y: point29.y, isSelected: false };
+      let point81 = { x: point29.x + (point29.y - point28.y), y: point29.y, isSelected: false }
+			this.circles.push(point80);
+			this.circles.push(point81);
+		},
+		close() {
+			this.$emit('close');
+		},
+		async init() {
+			let pointInfo = await getPointInfo(this.photoId);
+			if (pointInfo.data.data.label_point_info) {
+				this.circles = JSON.parse(pointInfo.data.data.label_point_info);
+			} else {
+				this.circles = JSON.parse(pointInfo.data.data.point_info);
+			}
+
 			this.formDataCircles();
 			let circles = this.circles;
 			let self = this;
-			let url =
-				'http://os6zbdtt2.bkt.clouddn.com/Fmn93Hl1NzY2A9dP-FgBmrNzRxMa?nsukey=SoEyfKwopX0ZH%2FuoHP1Ua0s6xaa4DL6iW19AcUv6O%2Boenz4C25HDtZSIlkpHXh8NSvsi1fjAEGrCYrW%2BIpwRz%2FlYmzj53JVNt8iIgXERi2XX6VG5hWn8Mx75U%2F2qHQcvN9TJGT7y%2BXsjhLvjHAMP6vReveDWDdxKD9e46hk6rsuZUMU%2BznUPpAa8txpzGarQNoG2a%2FfZCvU4yg0LhZQBAg%3D%3D';
+			let url = this.fileUrl;
 			let canvas = document.createElement('canvas');
 			let context = canvas.getContext('2d');
 			let img = new Image();
-			let radius = 3;
+			let radius = 1.5;
 			let previousSelectedCircle;
 			let bg;
-			let colors = ['#409EFF', 'red', 'green'];
+			let colors = ['#409EFF', 'white', 'green'];
 
 			canvas.onmousedown = canvasClick;
 
@@ -63,15 +101,19 @@ export default {
 					if (i >= circles.length - 2) {
 						color = colors[2];
 					}
-				
+					if (i > 68) {
+						radius = 3;
+						context.font = '12px blod';
+						context.fillStyle = 'blue';
+						context.fillText(i, circle.x + 8, circle.y - 6);
+					} else {
+						radius = 1.5;
+					}
+
 					// 绘制圆圈
 					context.globalAlpha = 0.85;
 					context.beginPath();
 					context.arc(circle.x, circle.y, radius, 0, Math.PI * 2);
-
-					context.font = "16px blod";
-					context.fillStyle = "red";
-					context.fillText(i, circle.x + 8, circle.y - 6);
 
 					if (circle.isSelected) {
 						context.strokeStyle = color;
@@ -127,8 +169,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.container {
+.wrapper {
 	width: 100%;
 	height: 100%;
+	background: white;
 }
 </style>
