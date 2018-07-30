@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SERVER_URL } from '../config';
 
-export function getPhotos(manual_label = 0, page_num = 1, page_size = 100) {
+export function getPhotos(manual_label = 0, page_num = 1, page_size = 20) {
   return axios({
     url: `${SERVER_URL}photo/list`,
     method: 'get',

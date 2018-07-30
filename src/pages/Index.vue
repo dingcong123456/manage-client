@@ -31,6 +31,13 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            background
+            @current-change="labelCurrentChange"
+            :page-size="20"
+            layout="prev, pager, next"
+            :total="labelTotal">
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="已标注照片" name="second">
           <el-table
@@ -62,6 +69,13 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            background
+            :page-size="20"
+             @current-change="notLabelCurrentChange"
+            layout="prev, pager, next"
+            :total="notLabelTotal">
+          </el-pagination>
         </el-tab-pane>
       </el-tabs>
 </template>
@@ -76,6 +90,8 @@ export default {
       activeName: 'first',
       labelData: [],
       notLabelData: [],
+      labelTotal:20,
+      notLabelTotal: 20,
       qiniuUrl
 		}
   },
@@ -85,10 +101,22 @@ export default {
   methods: {
     async init() {
       let labelData = await getPhotos();
-      this.labelData = labelData.data.data.rows
+      this.labelData = labelData.data.data.rows;
+      this.labelTotal = labelData.data.data.count;
 
       let notLabelData = await getPhotos(1);
       this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelTotal = notLabelData.data.data.count;
+    },
+    async labelCurrentChange(page){
+      let labelData = await getPhotos(0,page,20);
+      this.labelData = labelData.data.data.rows;
+      this.labelTotal = labelData.data.data.count;
+    },
+    async notLabelCurrentChange(page){
+      let notLabelData = await getPhotos(1, page, 20);
+      this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelTotal = notLabelData.data.data.count;
     },
     labelClick (e) {
       console.log(e);
