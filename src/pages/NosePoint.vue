@@ -95,13 +95,13 @@ export default {
 				for (var i = 0; i < circles.length; i++) {
 					var circle = circles[i];
 					let color = colors[0];
-					if (i <= 68) {
+					if (i <= 67) {
 						color = colors[1];
 					}
 					if (i >= circles.length - 2) {
 						color = colors[2];
 					}
-					if (i > 68) {
+					if (i > 67) {
 						radius = 3;
 						context.font = '12px blod';
 						context.fillStyle = 'blue';
