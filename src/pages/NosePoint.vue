@@ -73,7 +73,7 @@ export default {
       
       str = (function(points) {
 				let str;
-        let condition = (points[21][0] - points[39][0]);
+        let condition = (points[22][0] - points[21][0]) - (points[42][0] - points[39][0]);
         console.log(condition);
         //应该有个区间
 				if (condition > 0) {
