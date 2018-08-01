@@ -1,10 +1,16 @@
 <template>
-  <div class="wrapper" ref="container">
+  <div class="wrapper" >
     <div class="btnBox">
       <el-button type="primary" @click="addPonit">更新</el-button> 
       <!-- <el-button type="primary" @click="close">关闭</el-button>  -->
     </div>
-
+    <div ref="container"></div>
+    <div>
+      {{computedFeatures.join('，')}}
+      <!-- <span v-for="feature in computedFeatures">
+          {{feature}}
+      </span> -->
+    </div>
   </div>
 </template>
 
@@ -14,7 +20,8 @@ export default {
 	data() {
 		return {
 			circles: [[143, 198], [154, 168]],
-			scaling: 1
+			scaling: 1,
+			computedFeatures: [],
 		};
 	},
 	props: {
@@ -31,8 +38,191 @@ export default {
 		this.init();
 	},
 	methods: {
+		computedFeature() {
+			let str;
+			//眉眼间距
+			str = (function(points) {
+				let str;
+				let condition = (points[37][1] - points[19][1]) / (points[41][1] - points[37][1]);
+				console.log(condition);
+				if (condition > 1) {
+					str = '眉眼间距远';
+				} else if (condition < 0.5) {
+					str = '眉眼间距近';
+				} else {
+					str = '眉眼间距适中';
+				}
+				return str;
+			})(this.circles);
+			this.computedFeatures.push(str);
+
+			str = (function(points) {
+				let str;
+				let condition = (points[36][0] - points[17][0]) / (points[39][0] - points[36][0]);
+				console.log(condition);
+				if (condition > 0.25) {
+					str = '眉眼位置长过眼角20%';
+				} else if (condition < 0.15) {
+					str = '眉眼位置短于眼角20%';
+				} else {
+					str = '眉眼位置适中';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+      
+      str = (function(points) {
+				let str;
+        let condition = (points[21][0] - points[39][0]);
+        console.log(condition);
+        //应该有个区间
+				if (condition > 0) {
+					str = '眉头相对宽于内眼角位置';
+				} else if (condition < 0) {
+					str = '眉头相对窄于内眼角位置';
+				} else {
+					str = '眉头相对等于内眼角位置';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+      
+      str = (function(points) {
+				let str;
+				let condition = (points[41][1] - points[37][1]) / (points[39][0] - points[36][0]);
+				console.log(condition);
+				if (condition > (1/3 + 1/3 * 0.05)) {
+					str = '眼睛纵向长度大';
+				} else if (condition < (1/3 -  1/3 * 0.05)) {
+					str = '眼睛纵向长度小';
+				} else {
+					str = '眼睛纵向长度中等';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+      str = (function(points) {
+				let str;
+				let condition = (points[42][0] - points[39][0]) / (points[39][0] - points[36][0]);
+				console.log(condition);
+				if (condition > 1.05) {
+					str = '眼间距远';
+				} else if (condition < 0.95) {
+					str = '眼间距近';
+				} else {
+					str = '眼间距适中';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+      str = (function(points) {
+				let str;
+				let condition = (points[16][0] - points[0][0]) / (points[39][0] - points[36][0]);
+				console.log(condition);
+				if (condition > 4.2) {
+					str = '眼睛短';
+				} else if (condition < 3.8) {
+					str = '眼睛长';
+				} else {
+					str = '眼睛长短中等';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+      str = (function(points) {
+				let str;
+				let condition = (points[16][0] - points[0][0]) / (points[36][0] - points[0][0]);
+				console.log(condition);
+				if (condition > 8.4) {
+					str = '外眼角离脸部轮廓短';
+				} else if (condition < 7.6) {
+					str = '外眼角离脸部轮廓长';
+				} else {
+					str = '外眼角离脸部轮廓适中';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+      str = (function(points) {
+				let str;
+				let condition = (points[54][0] - points[48][0]) / (points[35][0] - points[31][0])* 1.1;
+				console.log(condition);
+				if (condition > 1.575) {
+					str = '嘴巴大';
+				} else if (condition < 1.425) {
+					str = '嘴巴小';
+				} else {
+					str = '嘴巴适中';
+				}
+				return str;
+      })(this.circles);
+      
+      str = (function(points) {
+				let str;
+				let condition = (points[8][0] - points[33][0]) / (points[62][0] - points[51][0]);
+				console.log(condition);
+				if (condition > 10.5) {
+					str = '嘴唇薄';
+				} else if (condition < 9.5) {
+					str = '嘴唇厚';
+				} else {
+					str = '嘴唇厚度适中';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+      str = (function(points) {
+				let str;
+				let condition = (points[35][0] - points[31][0])* 1.1 - (points[22][0] - points[21][0]);
+				console.log(condition);
+				if (condition > 0) {
+					str = '鼻翼宽';
+				} else if (condition < 0) {
+					str = '鼻翼窄';
+				} else {
+					str = '鼻翼适中';
+				}
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+
+
+      str = (function(points) {
+        let str;
+        let top = (points[19][1] - points[73][1]);
+        let middle = (points[33][1] - points[19][1]);
+        let bottom = (points[8][1] - points[33][1]);
+        let arr = [{
+          name: '上庭',
+          length: top
+        },{
+          name: '中庭',
+          length: middle
+        },{
+          name: '下庭',
+          length: bottom
+        }];
+
+        let max = arr.reduce(function (x,y) {
+          return x.length > y.length ? x : y
+        });
+
+        let min = arr.reduce(function (x,y) {
+          return x.length < y.length ? x : y
+        });
+
+        str = `${max.name}最长，${min.name}最短`;			
+				return str;
+			})(this.circles);
+      this.computedFeatures.push(str);
+		},
 		async addPonit() {
-      let circles =  this.circles.map(value => {
+			let circles = this.circles.map(value => {
 				return [value.x * this.scaling, value.y * this.scaling];
 			});
 			await addPointInfo(JSON.stringify(circles), this.photoId);
@@ -45,11 +235,11 @@ export default {
 			this.circles = this.circles.map(value => {
 				return { x: value[0], y: value[1], isSelected: false };
 			});
-      if (this.circles.length === 82) return;
-      let point28 = this.circles[28];
-      let point29 = this.circles[29];
-      let point80 = { x: point29.x - (point29.y - point28.y), y: point29.y, isSelected: false };
-      let point81 = { x: point29.x + (point29.y - point28.y), y: point29.y, isSelected: false }
+			if (this.circles.length === 82) return;
+			let point28 = this.circles[28];
+			let point29 = this.circles[29];
+			let point80 = { x: point29.x - (point29.y - point28.y), y: point29.y, isSelected: false };
+			let point81 = { x: point29.x + (point29.y - point28.y), y: point29.y, isSelected: false };
 			this.circles.push(point80);
 			this.circles.push(point81);
 		},
@@ -63,7 +253,7 @@ export default {
 			} else {
 				this.circles = JSON.parse(pointInfo.data.data.point_info);
 			}
-
+			this.computedFeature();
 			this.formDataCircles();
 			let circles = this.circles;
 			let self = this;
@@ -82,7 +272,7 @@ export default {
 			img.onload = function(e) {
 				self.scaling = this.width / defaultWidth;
 				canvas.width = this.width / self.scaling;
-				canvas.height = this.height /self.scaling;
+				canvas.height = this.height / self.scaling;
 				bg = this;
 				drawCircles(bg);
 				self.$refs.container.appendChild(canvas);
@@ -97,10 +287,10 @@ export default {
 				// 遍历所有圆圈
 				for (var i = 0; i < circles.length; i++) {
 					var circle = circles[i];
-					if(!circle.scale) {
+					if (!circle.scale) {
 						circle.scale = true;
-            circle.x = circle.x / self.scaling;
-            circle.y = circle.y / self.scaling;
+						circle.x = circle.x / self.scaling;
+						circle.y = circle.y / self.scaling;
 					}
 					let color = colors[0];
 					if (i <= 67) {
@@ -135,7 +325,7 @@ export default {
 			}
 
 			function canvasClick(e) {
-        console.log(e)
+				console.log(e);
 				// 取得画布上被单击的点
 				var clickX = e.pageX - canvas.getBoundingClientRect().left;
 				var clickY = e.pageY - canvas.getBoundingClientRect().top; // 查找被单击的圆圈
