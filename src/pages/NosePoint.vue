@@ -2,7 +2,7 @@
   <div class="wrapper" ref="container">
     <div class="btnBox">
       <el-button type="primary" @click="addPonit">更新</el-button> 
-      <el-button type="primary" @click="close">关闭</el-button> 
+      <!-- <el-button type="primary" @click="close">关闭</el-button>  -->
     </div>
 
   </div>
@@ -14,6 +14,7 @@ export default {
 	data() {
 		return {
 			circles: [[143, 198], [154, 168]],
+			scaling: 1
 		};
 	},
 	props: {
@@ -32,7 +33,7 @@ export default {
 	methods: {
 		async addPonit() {
       let circles =  this.circles.map(value => {
-				return [value.x, value.y];
+				return [value.x * this.scaling, value.y * this.scaling];
 			});
 			await addPointInfo(JSON.stringify(circles), this.photoId);
 			this.$message({
@@ -71,6 +72,7 @@ export default {
 			let context = canvas.getContext('2d');
 			let img = new Image();
 			let radius = 1.5;
+			let defaultWidth = 500;
 			let previousSelectedCircle;
 			let bg;
 			let colors = ['#409EFF', 'white', 'green'];
@@ -78,8 +80,9 @@ export default {
 			canvas.onmousedown = canvasClick;
 
 			img.onload = function(e) {
-				canvas.width = this.width;
-				canvas.height = this.height;
+				self.scaling = this.width / defaultWidth;
+				canvas.width = this.width / self.scaling;
+				canvas.height = this.height /self.scaling;
 				bg = this;
 				drawCircles(bg);
 				self.$refs.container.appendChild(canvas);
@@ -89,11 +92,16 @@ export default {
 			function drawCircles(bg) {
 				// 清除画布，准备绘制
 				context.clearRect(0, 0, canvas.width, canvas.height);
-				context.drawImage(bg, 0, 0, bg.width, bg.height);
+				context.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
 				// 遍历所有圆圈
 				for (var i = 0; i < circles.length; i++) {
 					var circle = circles[i];
+					if(!circle.scale) {
+						circle.scale = true;
+            circle.x = circle.x / self.scaling;
+            circle.y = circle.y / self.scaling;
+					}
 					let color = colors[0];
 					if (i <= 67) {
 						color = colors[1];
@@ -127,9 +135,10 @@ export default {
 			}
 
 			function canvasClick(e) {
+        console.log(e)
 				// 取得画布上被单击的点
-				var clickX = e.pageX - canvas.offsetLeft;
-				var clickY = e.pageY - canvas.offsetTop; // 查找被单击的圆圈
+				var clickX = e.pageX - canvas.getBoundingClientRect().left;
+				var clickY = e.pageY - canvas.getBoundingClientRect().top; // 查找被单击的圆圈
 				for (var i = circles.length - 1; i >= 0; i--) {
 					var circle = circles[i]; //使用勾股定理计算这个点与圆心之间的距离
 					var distanceFromCenter = Math.sqrt(Math.pow(circle.x - clickX, 2) + Math.pow(circle.y - clickY, 2)); // 判断这个点是否在圆圈中
@@ -141,8 +150,8 @@ export default {
 						drawCircles(bg); //停止搜索
 
 						canvas.onmousemove = function(ev) {
-							var disX = ev.clientX - canvas.offsetLeft;
-							var disY = ev.clientY - canvas.offsetTop;
+							var disX = ev.clientX - canvas.getBoundingClientRect().left;
+							var disY = ev.clientY - canvas.getBoundingClientRect().top;
 
 							if (previousSelectedCircle != null) previousSelectedCircle.isSelected = false;
 							previousSelectedCircle = circle; //选择新圆圈
@@ -155,7 +164,6 @@ export default {
 						canvas.onmouseup = function() {
 							canvas.onmousemove = null;
 							canvas.onmouseup = null;
-							console.log(circles);
 							return;
 						};
 						return;
@@ -170,7 +178,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .wrapper {
-  overflow: hidden;
+	overflow: hidden;
 	background: white;
 }
 </style>

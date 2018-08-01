@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="photo-box" >
-      <div @click="showPointBox=true" class="img" :style="{backgroundImage: `url(${qiniuUrl($route.query.file_url)})`}"></div>
-    </div>
+    <!-- <div class="photo-box" > -->
+      <!-- <div @click="showPointBox=true" class="img" :style="{backgroundImage: `url(${qiniuUrl($route.query.file_url)})`}"></div> -->
+    <!-- </div> -->
     <div class="label-box">
       <div v-for="featureGroup in answerData">
         <div>
@@ -21,7 +21,7 @@
           <!-- <el-button type="danger">跳过</el-button> -->
       </div>
     </div> 
-    <div class="point-box" v-if="showPointBox">
+    <div class="point-box">
       <nose-poit @close="showPointBox=false" :fileUrl="qiniuUrl($route.query.file_url)" :photoId="parseInt($route.query.id)"></nose-poit>
     </div> 
   </div>  
@@ -109,11 +109,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .point-box{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
+  width: 500px;
+	height: auto;
+	background: #ccc;
+  position: fixed;
+  right: 20px;
   z-index: 101;
 }
 .container {
