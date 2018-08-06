@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/pages/Index'
+import Train from '@/pages/Train'
 import Label from '@/pages/Label'
 import UpdateLabel from '@/pages/UpdateLabel'
 import Feature from '@/pages/Feature'
@@ -19,6 +20,11 @@ export default new Router({
       path: '/index',
       name: 'Index',
       component: Index
+    },
+    {
+      path: '/train',
+      name: 'Train',
+      component: Train
     },
     {
       path: '/label',

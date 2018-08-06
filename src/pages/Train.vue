@@ -1,0 +1,149 @@
+<template>
+ 
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="未标注照片" name="first">
+          <el-table
+            stripe
+            :data="labelData"
+            style="width: 100%">
+            <el-table-column
+              label="照片"
+              width="180">
+              <template slot-scope="scope">
+                <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.file_url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="照片id"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="created_at"
+              label="上传时间"
+              width="180">
+            </el-table-column>
+             <el-table-column
+              label="操作"
+              width="180">
+               <template slot-scope="scope">
+                <el-button @click="labelClick(scope.row)" type="text" size="small">标注</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            @current-change="labelCurrentChange"
+            :page-size="20"
+            layout="prev, pager, next"
+            :total="labelTotal">
+          </el-pagination>
+        </el-tab-pane>
+        <el-tab-pane label="已标注照片" name="second">
+          <el-table
+            stripe
+            :data="notLabelData"
+            style="width: 100%">
+            <el-table-column
+              label="照片"
+              width="180">
+              <template slot-scope="scope">
+                <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.file_url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="照片id"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="created_at"
+              label="上传时间"
+              width="180">
+            </el-table-column>
+             <el-table-column
+              label="操作"
+              width="180">
+               <template slot-scope="scope">
+                <el-button @click="updateLabelClick(scope.row)" type="text" size="small">更改标注</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            :page-size="20"
+             @current-change="notLabelCurrentChange"
+            layout="prev, pager, next"
+            :total="notLabelTotal">
+          </el-pagination>
+        </el-tab-pane>
+      </el-tabs>
+</template>
+
+<script>
+import { getTrainPhotos as getPhotos } from '../api';
+import { qiniuUrl } from '../util';
+export default {
+	name: 'Index',
+	data() {
+		return {
+      activeName: 'first',
+      labelData: [],
+      notLabelData: [],
+      labelTotal:20,
+      notLabelTotal: 20,
+      qiniuUrl
+		}
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      let labelData = await getPhotos();
+      this.labelData = labelData.data.data.rows;
+      this.labelTotal = labelData.data.data.count;
+
+      let notLabelData = await getPhotos(1);
+      this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelTotal = notLabelData.data.data.count;
+    },
+    async labelCurrentChange(page){
+      let labelData = await getPhotos(0,page,20);
+      this.labelData = labelData.data.data.rows;
+      this.labelTotal = labelData.data.data.count;
+    },
+    async notLabelCurrentChange(page){
+      let notLabelData = await getPhotos(1, page, 20);
+      this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelTotal = notLabelData.data.data.count;
+    },
+    labelClick (e) {
+      console.log(e);
+      this.$router.push({
+        path: '/label',
+        query: {
+          id: e.id,
+          user_id: e.user_id,
+          file_url: e.file_url
+        }
+      })
+    },
+    updateLabelClick (e) {
+      console.log(e);
+      this.$router.push({
+        path: '/update_label',
+        query: {
+          id: e.id,
+          user_id: e.user_id,
+          file_url: e.file_url
+        }
+      })
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+</style>
