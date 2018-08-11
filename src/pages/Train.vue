@@ -121,7 +121,7 @@ export default {
     labelClick (e) {
       console.log(e);
       this.$router.push({
-        path: '/label',
+        path: '/pc/label',
         query: {
           id: e.id,
           user_id: e.user_id,
@@ -132,7 +132,7 @@ export default {
     updateLabelClick (e) {
       console.log(e);
       this.$router.push({
-        path: '/update_label',
+        path: '/pc/update_label',
         query: {
           id: e.id,
           user_id: e.user_id,

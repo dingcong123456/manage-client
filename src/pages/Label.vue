@@ -74,6 +74,7 @@ export default {
           type: 'warning'
         });
       };
+      return;
       this.$router.push({
         path: '/label',
         query: {
