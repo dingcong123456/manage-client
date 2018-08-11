@@ -7,15 +7,15 @@
       <el-button type="primary" @click="revocation">撤销</el-button> 
       <el-button type="primary" @click="discard">丢弃</el-button>  
     </div>
-    <!-- <div class="countBox">
-      <span>标记额头数目：</span>
-      <span>标记下巴数目：</span>
-    </div> -->
+    <div class="countBox">
+      <span>标记额头数目：{{count[0]}}</span>
+      <span>标记下巴数目：{{count[1]}}</span>
+    </div>
   </div>
 </template>
 
 <script>
-import { snedPoint, getImgByFeatureId } from '../../api';
+import { snedPoint, getImgByFeatureId, getCount } from '../../api';
 import { qiniuUrl } from '../../util';
 export default {
 	data() {
@@ -23,7 +23,8 @@ export default {
       scaling: 1,
       circles: [],
       fileUrl: 'http://os6zbdtt2.bkt.clouddn.com/Fmn93Hl1NzY2A9dP-FgBmrNzRxMa?nsukey=SoEyfKwopX0ZH%2FuoHP1Ua0s6xaa4DL6iW19AcUv6O%2Boenz4C25HDtZSIlkpHXh8NSvsi1fjAEGrCYrW%2BIpwRz%2FlYmzj53JVNt8iIgXERi2XX6VG5hWn8Mx75U%2F2qHQcvN9TJGT7y%2BXsjhLvjHAMP6vReveDWDdxKD9e46hk6rsuZUMU%2BznUPpAa8txpzGarQNoG2a%2FfZCvU4yg0LhZQBAg%3D%3D',
-      imgId: ''
+      imgId: '',
+      count: {0: 0,1: 1}
       
 		};
   },
@@ -56,7 +57,9 @@ export default {
       let res = await getImgByFeatureId(0);
       this.fileUrl = qiniuUrl(res.data.data.url);
       this.imgId = res.data.data.img_id;
-      console.log(res);
+
+      res = await getCount(this.$store.state.userInfo.username);
+      this.count = res.data.data;
     },
     async init() {
       let self = this;

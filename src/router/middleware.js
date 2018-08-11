@@ -11,7 +11,9 @@ const m = {
           try {
             let data = await isSignIn();
             let is_sign_in = data.data.data.is_sign_in;
+            let username =  data.data.data.username;
             store.commit("SET_USER_ISLOGIN", is_sign_in);
+            store.commit("SET_USERNAME", username);
             if(is_sign_in) {
               next();
             } else {

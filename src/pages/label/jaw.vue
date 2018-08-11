@@ -10,23 +10,23 @@
       <el-button type="primary" @click="sendPoint">确认并下一个</el-button>
       <el-button type="primary" @click="discard">丢弃</el-button>  
     </div>
-    <!-- <div class="countBox">
-      <span>标记额头数目：</span>
-      <span>标记下巴数目：</span>
-    </div> -->
+    <div class="countBox">
+      <span>标记额头数目：{{count[0]}}</span>
+      <span>标记下巴数目：{{count[1]}}</span>
+    </div>
   </div>
 </template>
 
 <script>
-import { snedPoint, getImgByFeatureId } from '../../api';
+import { snedPoint, getImgByFeatureId, getCount} from '../../api';
 import { qiniuUrl } from '../../util';
 export default {
 	data() {
 		return {
       fileUrl: '',
       imgId: '',
-      info: ''
-      
+      info: '',
+      count: {0: 0,1: 1}
 		};
   },
   methods: {
@@ -43,7 +43,9 @@ export default {
       let res = await getImgByFeatureId(1);
       this.fileUrl = qiniuUrl(res.data.data.url);
       this.imgId = res.data.data.img_id;
-      console.log(res);
+      
+      res = await getCount(this.$store.state.userInfo.username);
+      this.count = res.data.data;
     }
   },
 	async mounted() {

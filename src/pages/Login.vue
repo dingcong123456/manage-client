@@ -53,7 +53,7 @@ export default {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					login(this.ruleForm2.account, this.ruleForm2.pass).then(res => {
-					self.$router.push('/forehead');
+					self.$router.push('/choose');
 				});
 				} else {
 					console.log('error submit!!');

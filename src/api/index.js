@@ -193,3 +193,11 @@ export function getCount(username) {
     withCredentials: true
   });
 }
+
+export function getUsers() {
+  return axios({
+    url: `${LABEL_URL}features/summary`,
+    method: 'get',
+    withCredentials: true
+  });
+}

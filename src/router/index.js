@@ -16,6 +16,7 @@ import NosePoint from '@/pages/NosePoint'
 import choose from '@/pages/label/choose'
 import forehead from '@/pages/label/forehead'
 import jaw from '@/pages/label/jaw'
+import users from '@/pages/label/users'
 
 import middleware from './middleware';
 
@@ -25,7 +26,7 @@ var router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/choose'
     },
     {
       path: '/login',
@@ -45,6 +46,13 @@ var router = new Router({
     {
       path: '/forehead',
       component: forehead,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/users',
+      component: users,
       meta: {
         requireAuth: true
       }
