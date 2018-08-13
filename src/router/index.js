@@ -16,7 +16,10 @@ import NosePoint from '@/pages/NosePoint'
 import choose from '@/pages/label/choose'
 import forehead from '@/pages/label/forehead'
 import jaw from '@/pages/label/jaw'
+import updateForehead from '@/pages/label/updateForehead'
+import updateJaw from '@/pages/label/updateJaw'
 import users from '@/pages/label/users'
+import userdetail from '@/pages/label/userdetail'
 
 import middleware from './middleware';
 
@@ -51,15 +54,38 @@ var router = new Router({
       }
     },
     {
-      path: '/users',
-      component: users,
+      path: '/updateforehead',
+      component: updateForehead,
       meta: {
         requireAuth: true
       }
     },
     {
+      path: '/users',
+      component: users,
+      meta: {
+        requireAuth: true,
+        keepAlive: true
+      }
+    },
+    {
+      path: '/userdetail',
+      component: userdetail,
+      meta: {
+        requireAuth: true,
+        keepAlive: true
+      }
+    },
+    {
       path: '/jaw',
       component: jaw,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/updatejaw',
+      component: updateJaw,
       meta: {
         requireAuth: true
       }

@@ -194,10 +194,38 @@ export function getCount(username) {
   });
 }
 
+export function getUserDetail(username) {
+  return axios({
+    url: `${LABEL_URL}features/listimg/${username}`,
+    method: 'get',
+    withCredentials: true
+  });
+}
+
 export function getUsers() {
   return axios({
     url: `${LABEL_URL}features/summary`,
     method: 'get',
+    withCredentials: true
+  });
+}
+
+export function getFeatureByImgId(img_id) {
+  return axios({
+    url: `${LABEL_URL}features/imginfo/${img_id}`,
+    method: 'get',
+    withCredentials: true
+  });
+}
+
+export function discardById(img_id, feature_id) {
+  return axios({
+    url: `${LABEL_URL}features/discard`,
+    method: 'post',
+    data: {
+      img_id,
+      feature_id
+    },
     withCredentials: true
   });
 }

@@ -19,6 +19,13 @@
         label="标记下巴数"
         width="180">
       </el-table-column>
+       <el-table-column
+        label="操作"
+        width="180">
+          <template slot-scope="scope">
+          <el-button @click="goUserDetail(scope.row.username)" type="text" size="small">查看详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -32,6 +39,15 @@ export default {
 		};
   },
   methods: {
+    goUserDetail(username){
+      console.log(username);
+      this.$router.push({
+        path: '/userdetail',
+        query: {
+          username: username
+        }
+      })
+    },
     async init() {
       let res = await getUsers();
       let usersObj = res.data.data;
