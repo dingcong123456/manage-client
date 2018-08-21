@@ -194,10 +194,15 @@ export function getCount(username) {
   });
 }
 
-export function getUserDetail(username) {
+export function getUserDetail(username, feature_id, page, size) {
   return axios({
     url: `${LABEL_URL}features/listimg/${username}`,
     method: 'get',
+    params: {
+      feature_id,
+      page,
+      size
+    },
     withCredentials: true
   });
 }

@@ -3,13 +3,13 @@
         <el-tab-pane label="额头" name="first">
            <el-table
       stripe
-      :data="foreheadData"
+      :data="forehead.data"
       style="width: 100%">
       <el-table-column
         label="照片"
         width="180">
         <template slot-scope="scope">
-          <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.url[0]) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+          <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
         </template>
       </el-table-column>
       <el-table-column
@@ -25,17 +25,24 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+            background
+            :page-size="forehead.size"
+             @current-change="getForhead"
+            layout="prev, pager, next"
+            :total="forehead.count">
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="下巴" name="second">
            <el-table
       stripe
-      :data="jawData"
+      :data="jaw.data"
       style="width: 100%">
       <el-table-column
         label="照片"
         width="180">
         <template slot-scope="scope">
-          <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.url[0]) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+          <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
         </template>
       </el-table-column>
       <el-table-column
@@ -51,20 +58,37 @@
         </template>
       </el-table-column>
     </el-table>
+     <el-pagination
+            background
+            :page-size="jaw.size"
+             @current-change="getJaw"
+            layout="prev, pager, next"
+            :total="jaw.count">
+          </el-pagination>
         </el-tab-pane>
       </el-tabs>
 </template>
 
 <script>
 import { qiniuUrl } from '../../util';
-import { getUserDetail } from '../../api';
+import { getCount, getUserDetail } from '../../api';
 export default {
 	data() {
 		return {
 			activeName: 'first',
-			foreheadData: [],
-			jawData: [],
-			qiniuUrl,
+      qiniuUrl,
+      jaw: {
+        data: [],
+        page: 1,
+        size: 20,
+        count: 0
+      },
+      forehead: {
+        data: [],
+        page: 1,
+        size: 20,
+        count: 0
+      }
 		};
 	},
 	beforeRouteEnter(to, from, next) {
@@ -91,13 +115,26 @@ export default {
 					id: id,
 				},
 			});
-		},
+    },
+    async getForhead(page) {
+      let username = this.$route.query.username;
+      let size = this.forehead.size;
+      let res = await getUserDetail(username, 0, page, size);
+      this.forehead.data = res.data.data[0];
+    },
+    async getJaw(page) {
+      let username = this.$route.query.username;
+      let size = this.jaw.size;
+      let res = await getUserDetail(username, 1, page, size);
+      this.jaw.data = res.data.data[1];
+    },
 		async init() {
-			let username = this.$route.query.username;
-			let res = await getUserDetail(username);
-			console.log(res);
-			this.foreheadData = res.data.data[0];
-			this.jawData = res.data.data[1];
+      let username = this.$route.query.username;
+      let res = await getCount(username);
+      this.forehead.count = res.data.data[0];
+      this.jaw.count = res.data.data[1];
+      this.getForhead();
+      this.getJaw();
 		},
 	},
 	async mounted() {

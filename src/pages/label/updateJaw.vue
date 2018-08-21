@@ -47,7 +47,7 @@ export default {
     async getImgUrl() {
       this.imgId = this.$route.query.id;
       let res = await getFeatureByImgId(this.imgId);
-      this.fileUrl = qiniuUrl(res.data.data.url[0]);
+      this.fileUrl = qiniuUrl(res.data.data.url);
       this.info = res.data.data[1];
     }
   },

@@ -11,6 +11,9 @@
             <div class="feature-name">{{feature.item.name}}</div>
             <div class="feature-list">
               <el-radio v-for="(item,key) in feature.answer_list" :key="key" v-model="feature.answer" :label="item.id">{{item.name}}</el-radio>
+               <div class="block">
+                <el-slider style="width: 300px" input-size="small" v-model="feature.coefficient"></el-slider>
+              </div>
             </div>  
           </div>
         </div>
@@ -21,9 +24,9 @@
           <!-- <el-button type="danger">跳过</el-button> -->
       </div>
     </div> 
-    <div class="point-box">
+    <!-- <div class="point-box">
       <nose-poit @close="showPointBox=false" :fileUrl="qiniuUrl($route.query.file_url)" :photoId="parseInt($route.query.id)"></nose-poit>
-    </div> 
+    </div>  -->
   </div>  
 </template>
 
@@ -91,6 +94,7 @@ export default {
 			for (let i in info.data.data) {
 				for (let j in info.data.data[i].list) {
           info.data.data[i].list[j].answer = '';
+           info.data.data[i].list[j].coefficient = 0;
 				}
 				answerData.push(info.data.data[i]);
 			}

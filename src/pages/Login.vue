@@ -53,7 +53,19 @@ export default {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					login(this.ruleForm2.account, this.ruleForm2.pass).then(res => {
-					self.$router.push('/choose');
+					if (res.data.code) {
+						self.$router.push('/choose');
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.data.msg,
+						});
+						this.ruleForm2 = {
+							account: '',
+							pass: '',	
+						}
+					};
+					
 				});
 				} else {
 					console.log('error submit!!');

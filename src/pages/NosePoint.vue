@@ -44,7 +44,14 @@ export default {
 			str = (function(points) {
 				let str;
 				let condition = (points[37][1] - points[19][1]) / (points[41][1] - points[37][1]);
-				console.log(condition);
+				if (condition > 2) {
+					condition = 2;
+				}
+				if (condition < 0.1) {
+					condition = 0.1;
+				}
+
+				let con = parseInt(condition / 2 * 100);
 				if (condition > 1) {
 					str = '眉眼间距远';
 				} else if (condition < 0.5) {
@@ -52,174 +59,240 @@ export default {
 				} else {
 					str = '眉眼间距适中';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
 			this.computedFeatures.push(str);
 
 			str = (function(points) {
 				let str;
-				let condition = (points[36][0] - points[17][0]) / (points[39][0] - points[36][0]);
-				console.log(condition);
-				if (condition > 0.25) {
+				let condition = Math.abs(points[36][0] - points[17][0]) / (points[21][0] - points[17][0]);
+				if (condition > 0.4) {
+					condition = 0.4;
+				}
+				if (condition < 0.01) {
+					condition = 0.01;
+				}
+				let con = parseInt(condition * 2.5 * 100);
+				if (condition > 0.2) {
 					str = '眉眼位置长过眼角20%';
-				} else if (condition < 0.15) {
+				} else if (condition < 0.2) {
 					str = '眉眼位置短于眼角20%';
 				} else {
 					str = '眉眼位置适中';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
-      
-      str = (function(points) {
+			this.computedFeatures.push(str);
+
+			str = (function(points) {
 				let str;
-        let condition = (points[22][0] - points[21][0]) - (points[42][0] - points[39][0]);
-        console.log(condition);
-        //应该有个区间
-				if (condition > 0) {
+				let condition = points[22][0] - points[21][0] - (points[42][0] - points[39][0]);
+				if (condition > 1.5) {
+					condition = 1.5;
+				}
+				if (condition < 0.5) {
+					condition = 0.5;
+				}
+				let con = parseInt((condition - 0.5) * 100);
+				//应该有个区间
+				if (condition > 1.1) {
 					str = '眉头相对宽于内眼角位置';
-				} else if (condition < 0) {
+				} else if (condition < 0.9) {
 					str = '眉头相对窄于内眼角位置';
 				} else {
 					str = '眉头相对等于内眼角位置';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
-      
-      str = (function(points) {
+			this.computedFeatures.push(str);
+
+			str = (function(points) {
 				let str;
 				let condition = (points[41][1] - points[37][1]) / (points[39][0] - points[36][0]);
-				console.log(condition);
-				if (condition > (1/3 + 1/3 * 0.05)) {
+				if (condition > 0.5) {
+					condition = 0.5;
+				}
+				if (condition < 0.1) {
+					condition = 0.1;
+				}
+				let con = parseInt((condition * 2) * 100);
+				if (condition > 0.35) {
 					str = '眼睛纵向长度大';
-				} else if (condition < (1/3 -  1/3 * 0.05)) {
+				} else if (condition < 0.3) {
 					str = '眼睛纵向长度小';
 				} else {
 					str = '眼睛纵向长度中等';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 
-      str = (function(points) {
+			str = (function(points) {
 				let str;
 				let condition = (points[42][0] - points[39][0]) / (points[39][0] - points[36][0]);
-				console.log(condition);
-				if (condition > 1.05) {
+				if (condition > 1.5) {
+					condition = 1.5;
+				}
+				if (condition < 0.5) {
+					condition = 0.5;
+				}
+				let con = parseInt((condition - 0.5) * 100);
+				if (condition > 1.1) {
 					str = '眼间距远';
-				} else if (condition < 0.95) {
+				} else if (condition < 0.9) {
 					str = '眼间距近';
 				} else {
 					str = '眼间距适中';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 
-      str = (function(points) {
+			str = (function(points) {
 				let str;
-				let condition = (points[16][0] - points[0][0]) / (points[39][0] - points[36][0]);
-				console.log(condition);
-				if (condition > 4.2) {
-					str = '眼睛短';
-				} else if (condition < 3.8) {
+				let condition =  (points[39][0] - points[36][0])/(points[16][0] - points[0][0]);
+
+				if (condition > 0.4) {
+					condition = 0.4;
+				}
+				if (condition < 0.1) {
+					condition = 0.1;
+				}
+				let con = parseInt((condition * 2.5) * 100);
+				
+				if (condition > 0.25) {
 					str = '眼睛长';
+				} else if (condition < 0.18) {
+					str = '眼睛短';
 				} else {
 					str = '眼睛长短中等';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 
-      str = (function(points) {
+			str = (function(points) {
 				let str;
-				let condition = (points[16][0] - points[0][0]) / (points[36][0] - points[0][0]);
-				console.log(condition);
-				if (condition > 8.4) {
+				let condition = parseInt((points[16][0] - points[0][0]) / (points[45][0] - points[36][0])/(points[16][0] - points[0][0]));
+
+				if (condition > 0.4) {
+					condition = 0.4;
+				}
+				if (condition < 0.1) {
+					condition = 0.1;
+				}
+				let con = parseInt((condition * 2.5) * 100);
+
+				if (condition > 0.25) {
 					str = '外眼角离脸部轮廓短';
-				} else if (condition < 7.6) {
+				} else if (condition < 0.18) {
 					str = '外眼角离脸部轮廓长';
 				} else {
 					str = '外眼角离脸部轮廓适中';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 
-      str = (function(points) {
+			str = (function(points) {
 				let str;
-				let condition = (points[54][0] - points[48][0]) / (points[35][0] - points[31][0])* 1.1;
-				console.log(condition);
-				if (condition > 1.575) {
+				let condition = (points[54][0] - points[48][0]) / (points[35][0] - points[31][0]);
+				
+				if (condition > 2) {
+					condition = 2;
+				}
+				if (condition < 1) {
+					condition = 1;
+				}
+				let con = parseInt((condition - 1) * 100);
+
+				if (condition > 1.7) {
 					str = '嘴巴大';
-				} else if (condition < 1.425) {
+				} else if (condition < 1.4) {
 					str = '嘴巴小';
 				} else {
 					str = '嘴巴适中';
 				}
-				return str;
-      })(this.circles);
-      
-      str = (function(points) {
+				return `${con}--${str}`;
+			})(this.circles);
+			this.computedFeatures.push(str);
+
+			str = (function(points) {
 				let str;
-				let condition = (points[8][0] - points[33][0]) / (points[62][0] - points[51][0]);
-				console.log(condition);
-				if (condition > 10.5) {
-					str = '嘴唇薄';
-				} else if (condition < 9.5) {
+				let condition = (points[62][0] - points[51][0]) / (points[8][0] - points[33][0]);
+				
+				if (condition > 0.25) {
+					condition = 0.25;
+				}
+				if (condition < 0.05) {
+					condition = 0.05;
+				}
+				let con = parseInt((condition * 4) * 100);
+
+				if (condition > 0.15) {
 					str = '嘴唇厚';
+				} else if (condition < 0.1) {
+					str = '嘴唇薄';
 				} else {
 					str = '嘴唇厚度适中';
 				}
-				return str;
+				return `${con}--${str}`;
 			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 
-      str = (function(points) {
+			str = (function(points) {
 				let str;
-				let condition = (points[35][0] - points[31][0])* 1.1 - (points[22][0] - points[21][0]);
-				console.log(condition);
-				if (condition > 0) {
+				let condition = (points[35][0] - points[31][0]) /  (points[42][0] - points[39][0]);
+				if (condition > 1.5) {
+					condition = 1.5;
+				}
+				if (condition < 0.5) {
+					condition = 0.5;
+				}
+				let con = parseInt((condition - 0.5) * 100);
+				if (condition > 1.1) {
 					str = '鼻翼宽';
-				} else if (condition < 0) {
+				} else if (condition < 0.9) {
 					str = '鼻翼窄';
 				} else {
 					str = '鼻翼适中';
 				}
+				return `${con}--${str}`;
+			})(this.circles);
+			this.computedFeatures.push(str);
+
+			str = (function(points) {
+				let str;
+				let top = points[19][1] - points[73][1];
+				let middle = points[33][1] - points[19][1];
+				let bottom = points[8][1] - points[33][1];
+				let arr = [
+					{
+						name: '上庭',
+						length: top,
+					},
+					{
+						name: '中庭',
+						length: middle,
+					},
+					{
+						name: '下庭',
+						length: bottom,
+					},
+				];
+
+				let max = arr.reduce(function(x, y) {
+					return x.length > y.length ? x : y;
+				});
+
+				let min = arr.reduce(function(x, y) {
+					return x.length < y.length ? x : y;
+				});
+
+				str = `${max.name}最长，${min.name}最短`;
 				return str;
 			})(this.circles);
-      this.computedFeatures.push(str);
-
-
-      str = (function(points) {
-        let str;
-        let top = (points[19][1] - points[73][1]);
-        let middle = (points[33][1] - points[19][1]);
-        let bottom = (points[8][1] - points[33][1]);
-        let arr = [{
-          name: '上庭',
-          length: top
-        },{
-          name: '中庭',
-          length: middle
-        },{
-          name: '下庭',
-          length: bottom
-        }];
-
-        let max = arr.reduce(function (x,y) {
-          return x.length > y.length ? x : y
-        });
-
-        let min = arr.reduce(function (x,y) {
-          return x.length < y.length ? x : y
-        });
-
-        str = `${max.name}最长，${min.name}最短`;			
-				return str;
-			})(this.circles);
-      this.computedFeatures.push(str);
+			this.computedFeatures.push(str);
 		},
 		async addPonit() {
 			let circles = this.circles.map(value => {

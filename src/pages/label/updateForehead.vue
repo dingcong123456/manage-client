@@ -47,10 +47,10 @@ export default {
       let data = await snedPoint(this.imgId, 0, JSON.stringify(circles));
       this.$refs.canvasWrapper.removeChild(this.$refs.canvasWrapper.firstChild)
       this.init();
-      this.$message({
-        type: 'success',
-        message: '更改成功!',
-      });
+       this.$message({
+          type: 'success',
+          message: '更改成功!',
+        });
     },
     revocation() {
       this.circles.pop();
@@ -60,7 +60,7 @@ export default {
     async getImgUrl() {
       this.imgId = this.$route.query.id;
       let res = await getFeatureByImgId(this.imgId);
-      this.fileUrl = qiniuUrl(res.data.data.url[0]);
+      this.fileUrl = qiniuUrl(res.data.data.url);
       this.circles = JSON.parse(res.data.data[0]);
     },
     async init() {
