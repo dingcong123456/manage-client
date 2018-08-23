@@ -66,6 +66,39 @@
             :total="jaw.count">
           </el-pagination>
         </el-tab-pane>
+        <el-tab-pane label="骨骼感" name="three">
+           <el-table
+      stripe
+      :data="skeleton.data"
+      style="width: 100%">
+      <el-table-column
+        label="照片"
+        width="180">
+        <template slot-scope="scope">
+          <div :style="{backgroundImage: 'url(' + qiniuUrl(scope.row.url) + ')',backgroundSize:'cover', width: '75px', height: '75px'}"></div> 
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="id"
+        label="照片id"
+        width="180">
+      </el-table-column>
+        <el-table-column
+        label="操作"
+        width="180">
+          <template slot-scope="scope">
+          <el-button @click="goSkeleton(scope.row.id)" type="text" size="small">查看骨骼感</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+     <el-pagination
+            background
+            :page-size="skeleton.size"
+             @current-change="getSkeleton"
+            layout="prev, pager, next"
+            :total="skeleton.count">
+          </el-pagination>
+        </el-tab-pane>
       </el-tabs>
 </template>
 
@@ -84,6 +117,12 @@ export default {
         count: 0
       },
       forehead: {
+        data: [],
+        page: 1,
+        size: 20,
+        count: 0
+      },
+      skeleton: {
         data: [],
         page: 1,
         size: 20,
@@ -116,6 +155,14 @@ export default {
 				},
 			});
     },
+    goSkeleton(id) {
+			this.$router.push({
+				path: '/updateskeleton',
+				query: {
+					id: id,
+				},
+			});
+    },
     async getForhead(page) {
       let username = this.$route.query.username;
       let size = this.forehead.size;
@@ -128,13 +175,21 @@ export default {
       let res = await getUserDetail(username, 1, page, size);
       this.jaw.data = res.data.data[1];
     },
+     async getSkeleton(page) {
+      let username = this.$route.query.username;
+      let size = this.jaw.size;
+      let res = await getUserDetail(username, 2, page, size);
+      this.skeleton.data = res.data.data[2];
+    },
 		async init() {
       let username = this.$route.query.username;
       let res = await getCount(username);
       this.forehead.count = res.data.data[0];
       this.jaw.count = res.data.data[1];
+      this.skeleton.count = res.data.data[2];
       this.getForhead();
       this.getJaw();
+      this.getSkeleton();
 		},
 	},
 	async mounted() {

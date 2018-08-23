@@ -16,6 +16,8 @@ import NosePoint from '@/pages/NosePoint'
 import choose from '@/pages/label/choose'
 import forehead from '@/pages/label/forehead'
 import jaw from '@/pages/label/jaw'
+import skeleton from '@/pages/label/skeleton'
+import updateSkeleton from '@/pages/label/updateSkeleton'
 import updateForehead from '@/pages/label/updateForehead'
 import updateJaw from '@/pages/label/updateJaw'
 import users from '@/pages/label/users'
@@ -90,6 +92,20 @@ var router = new Router({
         requireAuth: true
       }
     },
+    {
+      path: '/skeleton',
+      component: skeleton,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/updateskeleton',
+      component: updateSkeleton,
+      meta: {
+        requireAuth: true
+      }
+    },  
     {
       path: '/pc',
       component: Pc,

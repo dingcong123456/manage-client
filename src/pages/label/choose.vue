@@ -2,6 +2,7 @@
   <div class="featureBox" >
     <el-button type="primary" @click="$router.push('/forehead')">标记额头</el-button>
     <el-button type="primary" @click="$router.push('/jaw')">标记下巴</el-button>
+		<el-button type="primary" @click="$router.push('/skeleton')">标记脸部骨骼感</el-button>
   </div>
 </template>
 

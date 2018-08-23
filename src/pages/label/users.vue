@@ -20,6 +20,11 @@
         width="180">
       </el-table-column>
        <el-table-column
+        prop="skeleton_count"
+        label="标记骨骼感"
+        width="180">
+      </el-table-column>
+       <el-table-column
         label="操作"
         width="180">
           <template slot-scope="scope">
@@ -55,7 +60,8 @@ export default {
         return {
           username: user,
           forehead_count: usersObj[user][0],
-          jaw_count: usersObj[user][1]
+          jaw_count: usersObj[user][1],
+          skeleton_count: usersObj[user][2]
         }
       })
     }
