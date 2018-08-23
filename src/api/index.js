@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SERVER_URL } from '../config';
 
-const LABEL_URL='http://101.132.175.224:5000/difftech/api/v0.1/'
+const LABEL_URL='http://47.101.184.42:5000/difftech/api/v0.1/'
 
 export function getPhotos(is_label = 0, page_num = 1, page_size = 20) {
   return axios({
