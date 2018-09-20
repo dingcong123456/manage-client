@@ -1,18 +1,19 @@
 import axios from 'axios';
 import { SERVER_URL } from '../config';
 
-const LABEL_URL='http://47.101.184.42:5000/difftech/api/v0.1/'
+const LABEL_URL='http://47.101.184.42:5000/difftech/api/v0.1/';
 
-export function getPhotos(is_label = 0, page_num = 1, page_size = 20) {
+const YIFAN_URL = 'http://diff.mobi:7777/';
+
+export function getPhotos(is_labeled = 0, page_num = 1, page_size = 20) {
   return axios({
-    url: `${SERVER_URL}photo/photo_list`,
+    url: `${YIFAN_URL}photo/list`,
     method: 'get',
     params: {
       page_num,
       page_size,
-      is_label
-    },
-    withCredentials: true
+      is_labeled 
+    }
   });
 }
 
@@ -75,10 +76,9 @@ export function delFeatureAnswer(id) {
 
 export function snedLabel(info) {
   return axios({
-    url: `${SERVER_URL}feature/addphotofeature`,
+    url: `${YIFAN_URL}photo/feature`,
     method: 'post',
-    data:info,
-    withCredentials: true
+    data:info
   });
 }
 

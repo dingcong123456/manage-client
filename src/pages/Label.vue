@@ -32,6 +32,18 @@
       </div>
 
       
+      <div class="radioBox">
+        <div class="title">脸型</div>
+        <el-radio v-model="labelInfo.face_shape" :label="0">鹅蛋脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="1">长方脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="2">倒三角脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="3">钻石脸</el-radio>
+        <br>
+        <el-radio v-model="labelInfo.face_shape" :label="4">梨形脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="5">心形脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="6">圆脸</el-radio>
+        <el-radio v-model="labelInfo.face_shape" :label="7">方脸</el-radio>
+      </div>
 
       <div class="radioBox">
         <div class="title">内眼角形状</div>
@@ -88,8 +100,8 @@
 
       <div class="radioBox">
         <div class="title">颧骨高低</div>
-        <el-radio v-model="labelInfo.cheekbone_height" :label="0">高</el-radio>
-        <el-radio v-model="labelInfo.cheekbone_height" :label="1">低</el-radio>
+        <el-radio v-model="labelInfo.face_frontal_bone" :label="0">高</el-radio>
+        <el-radio v-model="labelInfo.face_frontal_bone" :label="1">低</el-radio>
       </div>
       
       <div class="feature-box">
@@ -97,88 +109,71 @@
           <el-button type="primary" @click="next">下一个</el-button> 
           <!-- <el-button type="danger">跳过</el-button> -->
       </div>
-    </div> 
+			<div v-if="count">还有 {{count}} 张未标注</div>
+    </div>
+		<div class="photo-box" :style="{backgroundImage: 'url(' + qiniuUrl(file_url) + ')',backgroundSize:'cover'}">
+		</div> 
+
   </div>  
 </template>
 
 <script>
-import { featureAndAnswer, snedLabel, getPhotos } from '../api';
+import { snedLabel } from '../api';
+import { qiniuUrl } from '../util';
 export default {
 	name: 'Label',
 	data() {
 		return {
+			qiniuUrl,
 			labelInfo: {
+        face_shape: 0,
+        eyes_inner_shape: 0,
+        eyes_swell: 0,
+        eyes_single_double: 0,
+        face_best_width: 0,
+        face_length_width_ratio: 0,
+        jaw_shape: 0,
+        face_three_short: 0,
+        face_three_long: 0,
+        face_frontal_bone: 0,
 				eyebrow_color: 100,
-				eyes_inner_shape: 0,
-				eyes_swell: 0,
-				eyes_single_double: 0,
 				nose_height: 100,
 				mouth_gagtooth: 100,
 				face_bone_feel: 100,
-				face_best_width: 0,
-				face_length_width_ratio: 0,
-				forehead_width: 100,
-				jaw_shape: 0,
-        face_three_short: 0,
-        face_three_long: 0,
-        cheekbone_height: 0
-			}
+				forehead_width: 100			
+			},
+			photo_id: '',
+			file_url: '',
+			count: 0
+
 		};
 	},
 	methods: {
 		async next() {
-			let send = true;
-			let base_feature = {};
-			this.answerData.forEach((item, index) => {
-				base_feature[item.info.key] = {};
-				item.list.forEach((list, index) => {
-					if (!list.answer) send = false;
-					let key = list.item.id.toString();
-					base_feature[item.info.key][key] = list.answer;
-				});
-			});
-			if (!send) {
-				this.$message.error('请将所有项目选择完，不能有不选的');
-				return;
-			}
-			let body = {
-				user_id: this.$route.query.user_id,
-				photo_id: this.$route.query.id,
-				base_feature,
-			};
+			let body = Object.assign({photo_id: parseInt(this.photo_id)}, this.labelInfo);
 			console.log(body);
-			await snedLabel(body);
-			let labelData = await getPhotos();
-			let photoInfo = labelData.data.data.rows[0];
+			let labelData = await snedLabel(body);
+			let photoInfo = labelData.data.data.photo;
 			if (!photoInfo) {
 				this.$message({
 					message: '没有更多了',
 					type: 'warning',
 				});
 			}
-			return;
 			this.$router.push({
-				path: '/label',
+				path: '/pc/label',
 				query: {
-					id: photoInfo.id,
-					user_id: photoInfo.user_id,
+					photo_id: photoInfo.id,
 					file_url: photoInfo.file_url,
+					count: labelData.data.data.count
 				},
 			});
 			window.location.reload();
 		},
 		async init() {
-			let info = await featureAndAnswer();
-			let answerData = [];
-			for (let i in info.data.data) {
-				for (let j in info.data.data[i].list) {
-					info.data.data[i].list[j].answer = '';
-					info.data.data[i].list[j].coefficient = 0;
-				}
-				answerData.push(info.data.data[i]);
-			}
-			console.log(answerData);
-			this.answerData = answerData;
+			this.photo_id = this.$route.query.photo_id;
+			this.file_url = this.$route.query.file_url;
+			this.count = this.$route.query.count;
 		},
 	},
 	components: {
@@ -191,14 +186,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.point-box {
-	width: 500px;
-	height: auto;
-	background: #ccc;
-	position: fixed;
-	right: 20px;
-	z-index: 101;
-}
 .container {
 	flex-direction: row;
 	width: 100%;

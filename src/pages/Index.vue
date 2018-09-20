@@ -18,11 +18,6 @@
               label="照片id"
               width="180">
             </el-table-column>
-            <el-table-column
-              prop="created_at"
-              label="上传时间"
-              width="180">
-            </el-table-column>
              <el-table-column
               label="操作"
               width="180">
@@ -39,7 +34,7 @@
             :total="labelTotal">
           </el-pagination>
         </el-tab-pane>
-        <el-tab-pane label="已标注照片" name="second">
+        <!-- <el-tab-pane label="已标注照片" name="second">
           <el-table
             stripe
             :data="notLabelData"
@@ -54,11 +49,6 @@
             <el-table-column
               prop="id"
               label="照片id"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="created_at"
-              label="上传时间"
               width="180">
             </el-table-column>
              <el-table-column
@@ -76,7 +66,7 @@
             layout="prev, pager, next"
             :total="notLabelTotal">
           </el-pagination>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
 </template>
 
@@ -101,21 +91,21 @@ export default {
   methods: {
     async init() {
       let labelData = await getPhotos();
-      this.labelData = labelData.data.data.rows;
+      this.labelData = labelData.data.data.photos;
       this.labelTotal = labelData.data.data.count;
 
       let notLabelData = await getPhotos(1);
-      this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelData = notLabelData.data.data.photos;
       this.notLabelTotal = notLabelData.data.data.count;
     },
     async labelCurrentChange(page){
       let labelData = await getPhotos(0,page,20);
-      this.labelData = labelData.data.data.rows;
+      this.labelData = labelData.data.data.photos;
       this.labelTotal = labelData.data.data.count;
     },
     async notLabelCurrentChange(page){
       let notLabelData = await getPhotos(1, page, 20);
-      this.notLabelData = notLabelData.data.data.rows;
+      this.notLabelData = notLabelData.data.data.photos;
       this.notLabelTotal = notLabelData.data.data.count;
     },
     labelClick (e) {
@@ -123,8 +113,7 @@ export default {
       this.$router.push({
         path: '/pc/label',
         query: {
-          id: e.id,
-          user_id: e.user_id,
+          photo_id: e.id,
           file_url: e.file_url
         }
       })
@@ -134,8 +123,7 @@ export default {
       this.$router.push({
         path: '/pc/update_label',
         query: {
-          id: e.id,
-          user_id: e.user_id,
+          photo_id: e.id,
           file_url: e.file_url
         }
       })
