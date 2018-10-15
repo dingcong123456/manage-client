@@ -4,6 +4,14 @@ import { SERVER_URL } from '../config';
 const LABEL_URL='http://47.101.184.42:5000/difftech/api/v0.1/';
 
 const YIFAN_URL = 'http://diff.mobi:7777/';
+// const YIFAN_URL = 'http://localhost:7777/';
+axios.interceptors.request.use(function (config) {
+  config.headers.token = "free";
+  return config
+}, function (error) {
+  // 对请求错误做些什么
+  return Promise.reject(error);
+});
 
 export function getPhotos(is_labeled = 0, page_num = 1, page_size = 20) {
   return axios({
